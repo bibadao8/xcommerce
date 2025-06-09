@@ -1,4 +1,4 @@
-# Trendora - E-commerce Clothing Website
+# Trendora - Ecommerce Clothing Website
 
 Trendora is a modern and responsive e-commerce web application designed to showcase and sell clothing items. The platform provides users with a seamless browsing experience and a clean, user-friendly interface.
 
