@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "cloudinary": "^2.6.1",
+    "motion": "^12.6.2",
+    "multer": "^1.4.5-lts.2",
+    "sonner": "^2.0.2",
+    "streamifier": "^0.1.1"
+  }
+}
