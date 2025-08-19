@@ -22,9 +22,15 @@ app.use(cors({
         'http://localhost:5173', // Local development
         'http://localhost:3000', // Alternative local port
         'https://*.vercel.app',  // Vercel domains
-        'https://*.vercel.com'   // Vercel domains
+        'https://*.vercel.com',   // Vercel domains
+        'https://xcommerce-o3vh-6fydfc270-bis-projects-90e2b389.vercel.app', // Your specific Vercel domain
+        'https://trendora-website.vercel.app', // Alternative domain name
+        'https://xcommerce-5rlx-r6dalxgav-bis-projects-90e2b389.vercel.app', // New Vercel domain from error log
+        'https://xcommerce-iota.vercel.app' // API domain mentioned in error
     ],
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }))
 
 dotenv.config()
