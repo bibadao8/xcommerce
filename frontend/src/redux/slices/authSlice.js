@@ -29,7 +29,7 @@ export const loginUser = createAsyncThunk(
         userData
       );
       localStorage.setItem("userInfo", JSON.stringify(response.data.user));
-      localStorage.setItem("userToken", JSON.stringify(response.data.token));
+      localStorage.setItem("userToken", response.data.token);
       return response.data.user;
     } catch (error) {
       const message =
@@ -51,7 +51,7 @@ export const registerUser = createAsyncThunk(
         userData
       );
       localStorage.setItem("userInfo", JSON.stringify(response.data.user));
-      localStorage.setItem("userToken", JSON.stringify(response.data.token));
+      localStorage.setItem("userToken", response.data.token);
       return response.data.user;
     } catch (error) {
       const message =

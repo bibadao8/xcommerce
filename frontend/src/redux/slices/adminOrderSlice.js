@@ -10,7 +10,7 @@ export const fetchAllOrders = createAsyncThunk(
                 `${import.meta.env.VITE_BACKEND_URL}/api/admin/orders`,
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+                        Authorization: `Bearer ${localStorage.getItem("userToken") || ""}`,
                     },
                 }
             );
@@ -30,7 +30,7 @@ export const updateOrderStatus = createAsyncThunk(
                 `${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${id}`, { status },
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+                        Authorization: `Bearer ${localStorage.getItem("userToken") || ""}`,
                     },
                 }
             );
@@ -50,7 +50,7 @@ export const deleteOrder = createAsyncThunk(
                 `${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${id}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+                        Authorization: `Bearer ${localStorage.getItem("userToken") || ""}`,
                     },
                 }
             );

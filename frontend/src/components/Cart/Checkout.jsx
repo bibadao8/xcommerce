@@ -51,8 +51,12 @@ const Checkout = () => {
 
     const handlePaymentSuccess = async (details) => {
         try {
+            if (!checkoutId) {
+                console.error("Missing checkoutId before marking as paid");
+                return;
+            }
             const response = await axios.put(
-                `${import.meta.env.VITE_BACKEND_URL}/api/checkout/pay`,
+                `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,
                 { paymentStatus: "paid", paymentDetails: details },
                 {
                     headers: {
@@ -81,7 +85,7 @@ const Checkout = () => {
                     },
                 }
             );
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 201) {
                 navigate("/order-confirmation")
             } else {
                 console.error(error)

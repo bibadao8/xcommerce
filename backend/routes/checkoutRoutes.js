@@ -18,10 +18,19 @@ router.post("/", protect, async (req, res) => {
         return res.status(400).json({ message: "no items in checkout" });
     }
     try {
+        // Normalize items to Checkout schema: productID, name, image, price, quantity
+        const normalizedItems = checkoutItems.map((item) => ({
+            productID: item.productID || item.productId || item.product || item._id,
+            name: item.name,
+            image: item.image,
+            price: item.price,
+            quantity: item.quantity,
+        }));
+
         // Create a new checkout session
         const newCheckout = await Checkout.create({
             user: req.user._id,
-            checkoutItems: checkoutItems,
+            checkoutItems: normalizedItems,
             shippingAddress,
             paymentMethod,
             totalPrice,

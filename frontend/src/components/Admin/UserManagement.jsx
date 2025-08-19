@@ -1,49 +1,39 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchUsers, addUser, updateUser, deleteUser } from '../../redux/slices/adminSlice'
 
 const UserManager = () => {
-
-  const users = [
-    {
-      _id: 123123,
-      name: "John Doe",
-      email: "john@example.com",
-      role: "admin",
-    },
-  ];
+  const dispatch = useDispatch()
+  const { users, loading, error } = useSelector((state) => state.admin)
 
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "customer",
-  });
+    name: '',
+    email: '',
+    password: '',
+    role: 'customer',
+  })
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  }, [dispatch])
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(formData)
-
-    setFormData({
-      name: "",
-      email: "",
-      password: "",
-      role: "customer",
-    })
+    await dispatch(addUser(formData))
+    setFormData({ name: '', email: '', password: '', role: 'customer' })
   }
 
-  const handleRoleChange = (userId, newRole) => {
-    console.log({ id: userId, role: newRole })
+  const handleRoleChange = async (userId, newRole) => {
+    await dispatch(updateUser({ id: userId, role: newRole }))
   }
 
-  const handleDeleteUser = (userId) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      console.log("deleting user with ID: ", userId)
+  const handleDeleteUser = async (userId) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      await dispatch(deleteUser(userId))
     }
   }
 
@@ -80,6 +70,8 @@ const UserManager = () => {
 
       {/* User List Management */}
       <div className="overflow-x-auto shadow-md sm:rounded-lg bg-white">
+        {loading && <div className="p-4">Loading...</div>}
+        {error && <div className="p-4 text-red-600">{error}</div>}
         <table className="min-w-full text-left text-gray-700">
           <thead className="bg-gray-50 text-sm font-semibold">
             <tr>
@@ -91,7 +83,7 @@ const UserManager = () => {
           </thead>
 
           <tbody>
-            {users.map((user) => (
+            {(users || []).map((user) => (
               <tr key={user._id} className="border-b hover:bg-gray-50">
                 <td className="p-4 font-medium text-gray-900 whitespace-nowrap">
                   {user.name}

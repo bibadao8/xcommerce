@@ -28,7 +28,7 @@ export const Navbar = () => {
         <nav className='bg-[#d8cfbc] container mx-auto flex items-center justify-between py-4 px-6'>
             <div>
                 <Link to="/" className='text-2xl font-bold'>
-                    Trendora
+                    X-Commerce
                 </Link>
             </div>
             <div className='hidden md:flex space-x-6'>

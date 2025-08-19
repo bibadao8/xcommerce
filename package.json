@@ -1,9 +1,22 @@
 {
+  "name": "trendora-website",
+  "version": "1.0.0",
+  "description": "E-commerce website with React frontend and Node.js backend",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "dev": "cd frontend && npm run dev",
+    "install-frontend": "cd frontend && npm install",
+    "install-backend": "cd backend && npm install"
+  },
   "dependencies": {
     "cloudinary": "^2.6.1",
     "motion": "^12.6.2",
     "multer": "^1.4.5-lts.2",
     "sonner": "^2.0.2",
     "streamifier": "^0.1.1"
-  }
+  },
+  "keywords": ["ecommerce", "react", "nodejs", "mongodb"],
+  "author": "",
+  "license": "ISC"
 }

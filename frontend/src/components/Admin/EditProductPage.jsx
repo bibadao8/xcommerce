@@ -1,6 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from 'react-redux'
+import { useParams, useNavigate } from 'react-router-dom'
+import { updateProduct } from '../../redux/slices/productSlice'
+import axios from 'axios'
 
 const EditProductPage = () => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const { id } = useParams()
     const [productData, setProductData] = useState({
         name: "",
         description: "",
@@ -14,11 +21,31 @@ const EditProductPage = () => {
         collections: "",
         material: "",
         gender: "",
-        images: [
-            { url: "https://picsum.photos/150?random=1" },
-            { url: "https://picsum.photos/150?random=2" },
-        ]
+        images: []
     });
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`)
+            const p = res.data
+            setProductData({
+                name: p.name || '',
+                description: p.description || '',
+                price: p.price || 0,
+                countInStock: p.countInStock || 0,
+                sku: p.sku || '',
+                category: p.category || '',
+                brand: p.brand || '',
+                sizes: p.sizes || [],
+                colors: p.colors || [],
+                collections: p.collections || '',
+                material: p.material || '',
+                gender: p.gender || '',
+                images: p.images || []
+            })
+        }
+        if (id) fetchProduct()
+    }, [id])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -30,9 +57,10 @@ const EditProductPage = () => {
         console.log(file);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(productData);
+        await dispatch(updateProduct({ id, productData }))
+        navigate('/admin/products')
     };
 
     return (
@@ -93,7 +121,7 @@ const EditProductPage = () => {
                 <div className="mb-6">
                     <label className="block font-semibold mb-2">SKU</label>
                     <input
-                        type="number"
+                        type="text"
                         name="sku"
                         value={productData.sku}
                         onChange={handleChange}

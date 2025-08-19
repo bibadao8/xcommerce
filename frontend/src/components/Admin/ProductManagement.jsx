@@ -1,24 +1,28 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchAdminProducts, deleteProduct } from '../../redux/slices/adminProductSlice'
 
 const ProductManagement = () => {
-    const products = [
-        {
-            _id: 123123,
-            name: "Shirt",
-            price: 110,
-            sku: "123123213",
-        },
-    ];
+    const dispatch = useDispatch()
+    const { products, loading, error } = useSelector((state) => state.adminProducts)
 
-    const handleDelete = (id) => {
+    useEffect(() => {
+        dispatch(fetchAdminProducts())
+    }, [dispatch])
+
+    const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete the product?")) {
-            console.log("Delete the product with id: ", id);
+            await dispatch(deleteProduct(id))
+            dispatch(fetchAdminProducts())
         }
     };
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-10">
             <h2 className="text-2xl font-bold text-gray-800 mb-8">Product Management</h2>
+            {loading && <div className="p-4">Loading...</div>}
+            {error && <div className="p-4 text-red-600">{error}</div>}
             <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
                 <table className="min-w-full text-sm text-gray-700">
                     <thead className="bg-gray-100 text-xs uppercase tracking-wider text-gray-600">
@@ -30,7 +34,7 @@ const ProductManagement = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.length > 0 ? (
+                        {(products || []).length > 0 ? (
                             products.map((product) => (
                                 <tr
                                     key={product._id}

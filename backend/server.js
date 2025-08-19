@@ -15,7 +15,17 @@ const adminOrderRoutes = require("./routes/adminOrderRoutes")
 
 const app = express()
 app.use(express.json())
-app.use(cors())
+
+// CORS configuration for production deployment
+app.use(cors({
+    origin: [
+        'http://localhost:5173', // Local development
+        'http://localhost:3000', // Alternative local port
+        'https://*.vercel.app',  // Vercel domains
+        'https://*.vercel.com'   // Vercel domains
+    ],
+    credentials: true
+}))
 
 dotenv.config()
 

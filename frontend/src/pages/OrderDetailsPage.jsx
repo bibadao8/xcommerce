@@ -1,37 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import axios from 'axios'
 
 const OrderDetailsPage = () => {
     const { id } = useParams();
     const [orderDetails, setOrderDetails] = useState(null);
 
     useEffect(() => {
-        const mockOrderDetails = {
-            _id: id,
-            createdAt: new Date(),
-            isPaid: true,
-            isDelivered: false,
-            paymentMethod: "PayPal",
-            shippingMethod: "Standard",
-            shippingAddress: { city: "New York", country: "USA" },
-            orderItems: [
-                {
-                    productId: "1",
-                    name: "Jacket",
-                    price: 120,
-                    quantity: 1,
-                    image: "https://picsum.photos/150?random=1"
-                },
-                {
-                    productId: "2",
-                    name: "Shirt",
-                    price: 100,
-                    quantity: 2,
-                    image: "https://picsum.photos/150?random=2"
-                },
-            ]
-        };
-        setOrderDetails(mockOrderDetails);
+        const load = async () => {
+            try {
+                const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/orders/${id}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('userToken') || ''}` }
+                })
+                setOrderDetails(res.data)
+            } catch (e) {
+                setOrderDetails(null)
+            }
+        }
+        if (id) load()
     }, [id]);
 
     return (
@@ -53,9 +39,13 @@ const OrderDetailsPage = () => {
                             <span className={`px-4 py-1 text-sm rounded-full font-medium ${orderDetails.isPaid ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
                                 {orderDetails.isPaid ? "Approved" : "Pending"}
                             </span>
-                            <span className={`px-4 py-1 text-sm rounded-full font-medium ${orderDetails.isDelivered ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
-                                {orderDetails.isDelivered ? "Delivered" : "Pending Delivery"}
-                            </span>
+                            {orderDetails.status === 'Cancelled' ? (
+                                <span className="px-4 py-1 text-sm rounded-full font-medium bg-gray-200 text-gray-700">Cancelled</span>
+                            ) : (
+                                <span className={`px-4 py-1 text-sm rounded-full font-medium ${orderDetails.isDelivered ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
+                                    {orderDetails.isDelivered ? "Delivered" : "Pending Delivery"}
+                                </span>
+                            )}
                         </div>
                     </div>
 
@@ -68,8 +58,7 @@ const OrderDetailsPage = () => {
                         </div>
                         <div className="bg-gray-50 p-4 rounded-lg border">
                             <h4 className="text-lg font-semibold mb-2 text-gray-700">Shipping Info</h4>
-                            <p className="text-gray-600">Method: {orderDetails.shippingMethod}</p>
-                            <p className="text-gray-600">Address: {`${orderDetails.shippingAddress.city}, ${orderDetails.shippingAddress.country}`}</p>
+                            <p className="text-gray-600">Address: {orderDetails.shippingAddress ? `${orderDetails.shippingAddress.city}, ${orderDetails.shippingAddress.country}` : 'N/A'}</p>
                         </div>
                     </div>
 
@@ -88,7 +77,7 @@ const OrderDetailsPage = () => {
                                 </thead>
                                 <tbody>
                                     {orderDetails.orderItems.map((item) => (
-                                        <tr key={item.productId} className="border-t hover:bg-gray-50">
+                                        <tr key={item.productID} className="border-t hover:bg-gray-50">
                                             <td className="py-3 px-5 flex items-center gap-4">
                                                 <img
                                                     src={item.image}
@@ -96,7 +85,7 @@ const OrderDetailsPage = () => {
                                                     className="w-12 h-12 rounded-md object-cover"
                                                 />
                                                 <Link
-                                                    to={`/product/${item.productId}`}
+                                                    to={`/product/${item.productID}`}
                                                     className="text-blue-600 hover:underline"
                                                 >
                                                     {item.name}

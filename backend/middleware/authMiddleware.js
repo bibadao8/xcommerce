@@ -5,12 +5,14 @@ const User = require("../models/User");
 const protect = async (req, res, next) => {
     let token;
 
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith("Bearer")
-    ) {
+    const authHeader = req.headers.authorization;
+    if (authHeader && /^bearer\s/i.test(authHeader)) {
         try {
-            token = req.headers.authorization.split(" ")[1];
+            token = authHeader.split(" ")[1];
+            if (!token || token === "null" || token === "undefined") {
+                return res.status(401).json({ message: "Not authorized, token missing" });
+            }
+
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
             req.user = await User.findById(decoded.user.id).select("-password") //exclude password
