@@ -26,7 +26,8 @@ app.use(cors({
         'https://xcommerce-o3vh-6fydfc270-bis-projects-90e2b389.vercel.app', // Your specific Vercel domain
         'https://trendora-website.vercel.app', // Alternative domain name
         'https://xcommerce-5rlx-r6dalxgav-bis-projects-90e2b389.vercel.app', // New Vercel domain from error log
-        'https://xcommerce-iota.vercel.app' // Your backend API domain
+        'https://xcommerce-iota.vercel.app', // Your backend API domain
+        'https://xcommerce-btkn.vercel.app' // Your new frontend domain
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
